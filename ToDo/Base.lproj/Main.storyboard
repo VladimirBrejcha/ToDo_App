@@ -32,7 +32,13 @@
                             <outlet property="delegate" destination="5w3-UK-mJ4" id="rBf-Fc-fCe"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="ToDo" id="L4e-wj-7Qi"/>
+                    <navigationItem key="navigationItem" title="ToDo" id="L4e-wj-7Qi">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="4sJ-BJ-OjG">
+                            <connections>
+                                <action selector="addButtonPressed:" destination="5w3-UK-mJ4" id="EA8-ld-WUD"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9PX-pJ-jBH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -47,6 +53,9 @@
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.98624199628829956" green="0.7796865701675415" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="0.12637259066104889" green="0.12639245390892029" blue="0.12636536359786987" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -58,4 +67,5 @@
             <point key="canvasLocation" x="782.60869565217399" y="137.94642857142856"/>
         </scene>
     </scenes>
+    <color key="tintColor" red="0.12637259066104889" green="0.12639245390892029" blue="0.12636536359786987" alpha="1" colorSpace="calibratedRGB"/>
 </document>
