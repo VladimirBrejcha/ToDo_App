@@ -49,10 +49,19 @@ class TodoListViewController: UITableViewController {
     
     //MARK: - TableView Delegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        todoItems[indexPath.row].isDone = !todoItems[indexPath.row].isDone
-//        context.delete(todoItems[indexPath.row])
-//        todoItems.remove(at: indexPath.row)
-//        saveItems()
+        
+        if let item = todoItems?[indexPath.row] {
+            do {
+                try realm.write {
+                    item.isDone = !item.isDone
+                }
+            } catch {
+                print("error saving done status \(error)")
+            }
+        }
+        
+        tableView.reloadData()
+        
         tableView.deselectRow(at: indexPath, animated: true) //this line set cell to be instantly deselected after user has selected this cell
     }
     
