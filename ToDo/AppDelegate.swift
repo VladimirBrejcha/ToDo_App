@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         do {
             let realm = try Realm()
+            realm.beginWrite()
         } catch {
             print("error creating realm \(error)")
         }
