@@ -17,6 +17,7 @@ class CategoryViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         loadCategories()
     }
     
@@ -38,10 +39,12 @@ class CategoryViewController: UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationViewConroller = segue.destination as! TodoListViewController
+        
         if let indexPath = tableView.indexPathForSelectedRow {
             destinationViewConroller.selectedCategory = categories?[indexPath.row]
         }
     }
+    
     //MARK: - Data manipulation methods
     func loadCategories() {
         categories = realm.objects(Category.self)
@@ -54,7 +57,7 @@ class CategoryViewController: UITableViewController {
                 realm.add(category)
             }
         } catch {
-            print("error saving context \(error)")
+            print("error saving category \(error)")
         }
         tableView.reloadData()
     }
@@ -68,11 +71,13 @@ class CategoryViewController: UITableViewController {
             newCategory.name = textField.text!
             self.save(category: newCategory)
         }
-        alert.addTextField { (alertTextField) in
-            alertTextField.placeholder = "Category name"
-            textField = alertTextField
-        }
         alert.addAction(action)
+        
+        alert.addTextField { (alertTextField) in
+            textField = alertTextField
+            textField.placeholder = "Category name"
+        }
+        
         present(alert, animated: true, completion: nil)
     }
 }
