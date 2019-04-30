@@ -20,7 +20,6 @@ class CategoryViewController: SwipeTableViewController {
         
         loadCategory()
         
-        tableView.rowHeight = 80.0
     }
     
     //MARK: - TableView DataSource methods
@@ -38,15 +37,19 @@ class CategoryViewController: SwipeTableViewController {
     
     //MARK: - TableView Delegate methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         performSegue(withIdentifier: "goToItems", sender: self)
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         let destinationViewConroller = segue.destination as! TodoListViewController
         
         if let indexPath = tableView.indexPathForSelectedRow {
             destinationViewConroller.selectedCategory = categories?[indexPath.row]
         }
+        
     }
     
     //MARK: - Data manipulation methods
@@ -64,16 +67,6 @@ class CategoryViewController: SwipeTableViewController {
             print("error saving category \(error)")
         }
         tableView.reloadData()
-    }
-    
-    func deleteCategory(category: Category) {
-        do {
-            try realm.write {
-                realm.delete(category)
-            }
-        } catch {
-            print("error deleting category \(error)")
-        }
     }
     
     override func updateModel(at indexpath: IndexPath) {
