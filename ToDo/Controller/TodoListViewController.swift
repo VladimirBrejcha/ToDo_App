@@ -25,8 +25,6 @@ class TodoListViewController: SwipeTableViewController {
     //MARK: - Controller life cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
     }
     
     
