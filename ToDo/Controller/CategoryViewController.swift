@@ -19,7 +19,7 @@ class CategoryViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadCategories()
+        loadCategory()
         
         tableView.rowHeight = 80.0
     }
@@ -50,12 +50,12 @@ class CategoryViewController: UITableViewController {
     }
     
     //MARK: - Data manipulation methods
-    func loadCategories() {
+    func loadCategory() {
         categories = realm.objects(Category.self)
         tableView.reloadData()
     }
     
-    func save(category: Category) {
+    func saveCategory(category: Category) {
         do {
             try realm.write {
                 realm.add(category)
@@ -66,6 +66,16 @@ class CategoryViewController: UITableViewController {
         tableView.reloadData()
     }
     
+    func deleteCategory(category: Category) {
+        do {
+            try realm.write {
+                realm.delete(category)
+            }
+        } catch {
+            print("error deleting category \(error)")
+        }
+    }
+    
     //MARK: - Add new categories
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         var textField = UITextField()
@@ -73,7 +83,7 @@ class CategoryViewController: UITableViewController {
         let action = UIAlertAction(title: "Add category", style: .default) { (action) in
             let newCategory = Category()
             newCategory.name = textField.text!
-            self.save(category: newCategory)
+            self.saveCategory(category: newCategory)
         }
         alert.addAction(action)
         
@@ -94,6 +104,9 @@ extension CategoryViewController: SwipeTableViewCellDelegate {
         
         let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
             // handle action by updating model with deletion
+            if let categoryToDelete = self.categories?[indexPath.row] {
+                self.deleteCategory(category: categoryToDelete)
+            }
             
         }
         
@@ -101,6 +114,13 @@ extension CategoryViewController: SwipeTableViewCellDelegate {
         deleteAction.image = UIImage(named: "Trash Icon")
         
         return [deleteAction]
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        var options = SwipeOptions()
+        options.expansionStyle = .destructive
+        options.transitionStyle = .border
+        return options
     }
     
     
