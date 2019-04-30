@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 
 class TodoListViewController: SwipeTableViewController {
@@ -15,6 +16,7 @@ class TodoListViewController: SwipeTableViewController {
     private var todoItems: Results<Item>?
     let realm = try! Realm()
     
+    @IBOutlet weak var searchBar: UISearchBar!
     var selectedCategory: Category? {
         didSet {
             loadItems()
@@ -25,6 +27,13 @@ class TodoListViewController: SwipeTableViewController {
     //MARK: - Controller life cycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.barTintColor = UIColor(hexString: selectedCategory?.backgroundColor)
+        title = selectedCategory?.name
+        searchBar.barTintColor = UIColor(hexString: selectedCategory?.backgroundColor)
     }
     
     
@@ -39,6 +48,12 @@ class TodoListViewController: SwipeTableViewController {
         
         if let item = todoItems?[indexPath.row] {
             cell.textLabel?.text = item.title
+            if let color = UIColor(hexString: selectedCategory?.backgroundColor)?.darken(byPercentage: CGFloat(indexPath.row) / CGFloat(todoItems!.count)) {
+                cell.backgroundColor = color
+                cell.textLabel?.textColor = ContrastColorOf(backgroundColor: color, returnFlat: true)
+                
+            }
+            
             cell.accessoryType = item.isDone ? .checkmark : .none
         } else {
             cell.textLabel?.text = "No tasks added"
