@@ -23,6 +23,13 @@ class CategoryViewController: SwipeTableViewController {
     loadCategory()
   }
   
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(true)
+    navigationController?.navigationBar.tintColor = ContrastColorOf(backgroundColor: navigationBarTintColor!, returnFlat: true)
+    navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: ContrastColorOf(backgroundColor: navigationBarTintColor!, returnFlat: true)]
+    navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: ContrastColorOf(backgroundColor: navigationBarTintColor!, returnFlat: true)]
+  }
+  
   //MARK: - TableView DataSource methods
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return categories?.count ?? 1
@@ -33,6 +40,7 @@ class CategoryViewController: SwipeTableViewController {
     
     cell.backgroundColor = UIColor(hexString: categories?[indexPath.row].backgroundColor) ?? .white
     cell.textLabel?.text = categories?[indexPath.row].name ?? "No categores added yet"
+    cell.textLabel?.textColor = ContrastColorOf(backgroundColor: cell.backgroundColor!, returnFlat: true)
     
     return cell
   }
@@ -84,6 +92,7 @@ class CategoryViewController: SwipeTableViewController {
   @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
     var textField = UITextField()
     let alert = UIAlertController(title: "Add new category", message: "", preferredStyle: .alert)
+    let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
     let action = UIAlertAction(title: "Add category", style: .default) { action in
       let newCategory = Category()
       newCategory.name = textField.text!
@@ -92,12 +101,13 @@ class CategoryViewController: SwipeTableViewController {
       self.saveCategory(category: newCategory)
     }
     
-    alert.addAction(action)
-    
     alert.addTextField { (alertTextField) in
       textField = alertTextField
       textField.placeholder = "Category name"
     }
+    
+    alert.addAction(cancel)
+    alert.addAction(action)
     
     present(alert, animated: true, completion: nil)
   }

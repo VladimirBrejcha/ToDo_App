@@ -18,6 +18,7 @@ class SwipeTableViewController: UITableViewController {
         tableView.rowHeight = view.frame.height / 8
     }
   
+  
     func updateModel(at indexpath: IndexPath) {
         //update data modal
     }

@@ -31,9 +31,13 @@ class TodoListViewController: SwipeTableViewController {
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(true)
+    navigationController?.navigationBar.tintColor = ContrastColorOf(backgroundColor: navigationBarTintColor!, returnFlat: true)
+    navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: ContrastColorOf(backgroundColor: navigationBarTintColor!, returnFlat: true)]
+    navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: ContrastColorOf(backgroundColor: navigationBarTintColor!, returnFlat: true)]
     searchBarSetup()
   }
   
+  //MARK: UIsetup
   fileprivate func searchBarSetup() {
     searchBar.barTintColor = UIColor(hexString: selectedCategory?.backgroundColor)
     searchBar.backgroundColor = UIColor(hexString: selectedCategory?.backgroundColor)
@@ -55,8 +59,10 @@ class TodoListViewController: SwipeTableViewController {
       if let color = UIColor(hexString: selectedCategory?.backgroundColor)?.darken(byPercentage: CGFloat(indexPath.row) / CGFloat(todoItems!.count)) {
         cell.backgroundColor = color
         cell.textLabel?.textColor = ContrastColorOf(backgroundColor: color, returnFlat: true)
+        cell.tintColor = ContrastColorOf(backgroundColor: color, returnFlat: true)
       }
       cell.accessoryType = item.isDone ? .checkmark : .none
+      
     } else {
       cell.textLabel?.text = "No tasks added"
     }
@@ -87,6 +93,7 @@ class TodoListViewController: SwipeTableViewController {
     var textField = UITextField()
     
     let alert = UIAlertController(title: "Add new ToDo item", message: "", preferredStyle: .alert)
+    let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
     let action = UIAlertAction(title: "Add item", style: .default) { ( action ) in
       
       if let currentCategory = self.selectedCategory {
@@ -111,6 +118,7 @@ class TodoListViewController: SwipeTableViewController {
     }
     
     alert.addAction(action)
+    alert.addAction(cancel)
     
     present(alert, animated: true, completion: nil)
   }
