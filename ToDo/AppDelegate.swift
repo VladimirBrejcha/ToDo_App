@@ -7,27 +7,25 @@
 //
 
 import UIKit
-import CoreData
 import RealmSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+  
+  var window: UIWindow?
+  
+  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    //to check realm file path
+    //print(Realm.Configuration.defaultConfiguration.fileURL)
     
-    var window: UIWindow?
-    
-    
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        //        to check realm file path
-        //                print(Realm.Configuration.defaultConfiguration.fileURL)
-        
-        do {
-            _ = try Realm()
-        } catch {
-            print("error creating realm \(error)")
-        }
-        
-        return true
+    do {
+      _ = try Realm() //initialising Realm
+    } catch {
+      print("error creating realm \(error)")
     }
     
+    return true
+  }
+  
 }
 

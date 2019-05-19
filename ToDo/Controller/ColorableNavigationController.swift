@@ -5,8 +5,6 @@
 //  Created by Vladimir Korolev on 18/05/2019.
 //  Copyright © 2019 Vladimir Brejcha. All rights reserved.
 //
-
-//
 //  ColorableNavigationController.swift
 //
 //  Created by Vasily Ulianov on 26.10.16.

@@ -10,13 +10,11 @@ import UIKit
 import RealmSwift
 import ChameleonFramework
 
-class TodoListViewController: SwipeTableViewController, NavigationBarColorable {
-  
-  public var navigationBarTintColor: UIColor? { return UIColor(hexString: selectedCategory?.backgroundColor) }
+class TodoListViewController: SwipeTableViewController {
   
   private var todoItems: Results<Item>?
   
-  let realm = try! Realm()
+  private let realm = try! Realm()
   
   @IBOutlet weak var searchBar: UISearchBar!
   var selectedCategory: Category? {
@@ -26,16 +24,13 @@ class TodoListViewController: SwipeTableViewController, NavigationBarColorable {
   }
   
   //MARK: - Controller life cycle methods
-  
   override func viewDidLoad() {
     super.viewDidLoad()
-    
     title = selectedCategory?.name
   }
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(true)
-    
     searchBarSetup()
   }
   
@@ -53,7 +48,6 @@ class TodoListViewController: SwipeTableViewController, NavigationBarColorable {
   }
   
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
     let cell = super.tableView(tableView, cellForRowAt: indexPath)
     
     if let item = todoItems?[indexPath.row] {
@@ -62,7 +56,6 @@ class TodoListViewController: SwipeTableViewController, NavigationBarColorable {
         cell.backgroundColor = color
         cell.textLabel?.textColor = ContrastColorOf(backgroundColor: color, returnFlat: true)
       }
-      
       cell.accessoryType = item.isDone ? .checkmark : .none
     } else {
       cell.textLabel?.text = "No tasks added"
@@ -71,12 +64,10 @@ class TodoListViewController: SwipeTableViewController, NavigationBarColorable {
     return cell
   }
   
-  
   //MARK: - TableView Delegate Methods
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
     if let item = todoItems?[indexPath.row] {
-      //            print(item.dateCreated)
       do {
         try realm.write {
           item.isDone = !item.isDone
@@ -90,7 +81,6 @@ class TodoListViewController: SwipeTableViewController, NavigationBarColorable {
     
     tableView.deselectRow(at: indexPath, animated: true) //this line set cell to be instantly deselected after user has selected this cell
   }
-  
   
   //MARK: - Button methods
   @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
@@ -111,6 +101,7 @@ class TodoListViewController: SwipeTableViewController, NavigationBarColorable {
           print("error saving item \(error)")
         }
       }
+      
       self.tableView.reloadData()
     }
     
@@ -118,15 +109,15 @@ class TodoListViewController: SwipeTableViewController, NavigationBarColorable {
       alertTextField.placeholder = "Create new item"
       textField = alertTextField
     }
+    
     alert.addAction(action)
+    
     present(alert, animated: true, completion: nil)
   }
   
   
   //MARK: -  Changing data methods
-  
-  func loadItems() {
-    
+  private func loadItems() {
     todoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
     tableView.reloadData()
   }
@@ -179,5 +170,11 @@ extension TodoListViewController: UISearchBarDelegate {
     searchBar.showsCancelButton = false
   }
   
+}
+
+extension TodoListViewController: NavigationBarColorable {
+  public var navigationBarTintColor: UIColor? {
+    return UIColor(hexString: selectedCategory?.backgroundColor)
+  }
 }
 

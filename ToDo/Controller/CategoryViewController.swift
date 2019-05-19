@@ -10,26 +10,17 @@ import UIKit
 import RealmSwift
 import ChameleonFramework
 
-class CategoryViewController: SwipeTableViewController, NavigationBarColorable {
+class CategoryViewController: SwipeTableViewController {
   
-  let realm = try! Realm()
+  private let realm = try! Realm()
   
   private var categories: Results<Category>?
   
-  public var navigationBarTintColor: UIColor? { return UIColor.flatBlack() }
-  
+  //MARK: ViewController life cycle methods
   override func viewDidLoad() {
     super.viewDidLoad()
     
     loadCategory()
-    
-  }
-  
-  
-  //MARK: ViewController life cycle methods
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(true)
-
   }
   
   //MARK: - TableView DataSource methods
@@ -38,39 +29,34 @@ class CategoryViewController: SwipeTableViewController, NavigationBarColorable {
   }
   
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
     let cell = super.tableView(tableView, cellForRowAt: indexPath)
+    
     cell.backgroundColor = UIColor(hexString: categories?[indexPath.row].backgroundColor) ?? .white
     cell.textLabel?.text = categories?[indexPath.row].name ?? "No categores added yet"
+    
     return cell
   }
   
   //MARK: - TableView Delegate methods
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    
-    
-    
     performSegue(withIdentifier: "goToItems", sender: self)
-    
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    
     let destinationViewConroller = segue.destination as! TodoListViewController
     
     if let indexPath = tableView.indexPathForSelectedRow {
       destinationViewConroller.selectedCategory = categories?[indexPath.row]
     }
-    
   }
   
   //MARK: - Data manipulation methods
-  func loadCategory() {
+   private func loadCategory() {
     categories = realm.objects(Category.self)
     tableView.reloadData()
   }
   
-  func saveCategory(category: Category) {
+  private func saveCategory(category: Category) {
     do {
       try realm.write {
         realm.add(category)
@@ -78,6 +64,7 @@ class CategoryViewController: SwipeTableViewController, NavigationBarColorable {
     } catch {
       print("error saving category \(error)")
     }
+    
     tableView.reloadData()
   }
   
@@ -97,13 +84,14 @@ class CategoryViewController: SwipeTableViewController, NavigationBarColorable {
   @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
     var textField = UITextField()
     let alert = UIAlertController(title: "Add new category", message: "", preferredStyle: .alert)
-    let action = UIAlertAction(title: "Add category", style: .default) { (action) in
+    let action = UIAlertAction(title: "Add category", style: .default) { action in
       let newCategory = Category()
       newCategory.name = textField.text!
       newCategory.backgroundColor = UIColor.randomFlat().hexValue()
       print(newCategory.backgroundColor)
       self.saveCategory(category: newCategory)
     }
+    
     alert.addAction(action)
     
     alert.addTextField { (alertTextField) in
@@ -112,6 +100,13 @@ class CategoryViewController: SwipeTableViewController, NavigationBarColorable {
     }
     
     present(alert, animated: true, completion: nil)
+  }
+}
+
+extension CategoryViewController: NavigationBarColorable {
+  
+  public var navigationBarTintColor: UIColor? {
+    return UIColor.flatBlack()
   }
 }
 
